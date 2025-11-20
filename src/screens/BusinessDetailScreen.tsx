@@ -66,10 +66,18 @@ const BusinessDetailScreen: React.FC<Props> = ({ navigation, route }) => {
     }
   };
 
-  const handleGetDirections = () => {
+  const handleOpenGoogleMaps = () => {
     if (business) {
       const { latitude, longitude } = business;
       const url = `https://www.google.com/maps/dir/?api=1&destination=${latitude},${longitude}`;
+      Linking.openURL(url);
+    }
+  };
+
+  const handleOpenWaze = () => {
+    if (business) {
+      const { latitude, longitude } = business;
+      const url = `https://waze.com/ul?ll=${latitude},${longitude}&navigate=yes`;
       Linking.openURL(url);
     }
   };
@@ -177,14 +185,26 @@ const BusinessDetailScreen: React.FC<Props> = ({ navigation, route }) => {
                 <Text style={styles.buttonText}>Call</Text>
               </TouchableOpacity>
             )}
+          </View>
 
+          {/* Navigation buttons */}
+          <View style={styles.navigationContainer}>
             <TouchableOpacity
-              style={styles.directionsButton}
-              onPress={handleGetDirections}
+              style={styles.googleMapsButton}
+              onPress={handleOpenGoogleMaps}
               activeOpacity={0.7}
             >
               <Text style={styles.buttonIcon}>🗺️</Text>
-              <Text style={styles.buttonText}>Get Directions</Text>
+              <Text style={styles.buttonText}>Google Maps</Text>
+            </TouchableOpacity>
+
+            <TouchableOpacity
+              style={styles.wazeButton}
+              onPress={handleOpenWaze}
+              activeOpacity={0.7}
+            >
+              <Text style={styles.buttonIcon}>🚗</Text>
+              <Text style={styles.buttonText}>Waze</Text>
             </TouchableOpacity>
           </View>
 
@@ -282,7 +302,7 @@ const styles = StyleSheet.create({
   buttonContainer: {
     flexDirection: 'row',
     gap: Theme.spacing.md,
-    marginBottom: Theme.spacing.lg,
+    marginBottom: Theme.spacing.md,
   },
   callButton: {
     flex: 1,
@@ -294,9 +314,24 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     ...Theme.elevation.medium,
   },
-  directionsButton: {
+  navigationContainer: {
+    flexDirection: 'row',
+    gap: Theme.spacing.md,
+    marginBottom: Theme.spacing.lg,
+  },
+  googleMapsButton: {
     flex: 1,
     backgroundColor: Theme.colors.primary,
+    borderRadius: Theme.borderRadius.lg,
+    padding: Theme.spacing.md,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    ...Theme.elevation.medium,
+  },
+  wazeButton: {
+    flex: 1,
+    backgroundColor: '#33CCFF',
     borderRadius: Theme.borderRadius.lg,
     padding: Theme.spacing.md,
     flexDirection: 'row',
