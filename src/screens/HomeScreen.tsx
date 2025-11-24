@@ -77,7 +77,13 @@ const HomeScreen: React.FC<Props> = ({ navigation }) => {
     return (
       <SafeAreaView style={styles.container}>
         <Text style={styles.errorText}>{error}</Text>
-        <TouchableOpacity style={styles.retryButton} onPress={loadCategories}>
+        <TouchableOpacity
+          style={styles.retryButton}
+          onPress={loadCategories}
+          accessibilityRole="button"
+          accessibilityLabel={t('common.retry')}
+          accessibilityHint="Retry loading categories"
+        >
           <Text style={styles.retryButtonText}>{t('common.retry')}</Text>
         </TouchableOpacity>
       </SafeAreaView>
@@ -105,7 +111,14 @@ const HomeScreen: React.FC<Props> = ({ navigation }) => {
           </View>
         </View>
 
-        <TouchableOpacity style={styles.mapButton} onPress={handleMapPress} activeOpacity={0.7}>
+        <TouchableOpacity
+          style={styles.mapButton}
+          onPress={handleMapPress}
+          activeOpacity={0.7}
+          accessibilityRole="button"
+          accessibilityLabel={t('home.viewAllOnMap')}
+          accessibilityHint="Open map view showing all businesses"
+        >
           <Text style={styles.mapButtonIcon}>🗺️</Text>
           <Text style={styles.mapButtonText}>{t('home.viewAllOnMap')}</Text>
         </TouchableOpacity>
@@ -113,7 +126,15 @@ const HomeScreen: React.FC<Props> = ({ navigation }) => {
 
       {/* Bottom Navigation */}
       <View style={styles.bottomNav}>
-        <TouchableOpacity style={styles.navButton} onPress={() => {}} activeOpacity={0.7}>
+        <TouchableOpacity
+          style={styles.navButton}
+          onPress={() => {}}
+          activeOpacity={0.7}
+          accessibilityRole="button"
+          accessibilityLabel={t('navigation.home')}
+          accessibilityHint="Home screen, currently active"
+          accessibilityState={{ selected: true }}
+        >
           <Text style={[styles.navIcon, styles.navIconActive]}>🏠</Text>
           <Text style={[styles.navLabel, styles.navLabelActive]}>{t('navigation.home')}</Text>
         </TouchableOpacity>
@@ -122,6 +143,9 @@ const HomeScreen: React.FC<Props> = ({ navigation }) => {
           style={styles.navButton}
           onPress={handleSettingsPress}
           activeOpacity={0.7}
+          accessibilityRole="button"
+          accessibilityLabel={t('navigation.settings')}
+          accessibilityHint="Navigate to settings"
         >
           <Text style={styles.navIcon}>⚙️</Text>
           <Text style={styles.navLabel}>{t('navigation.settings')}</Text>

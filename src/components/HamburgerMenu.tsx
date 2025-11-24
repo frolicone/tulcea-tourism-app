@@ -95,7 +95,13 @@ const HamburgerMenu: React.FC<HamburgerMenuProps> = ({ visible, onClose }) => {
 
             <View style={styles.menuItems}>
               {/* Home */}
-              <TouchableOpacity style={styles.menuItem} onPress={() => handleNavigate('Home')}>
+              <TouchableOpacity
+                style={styles.menuItem}
+                onPress={() => handleNavigate('Home')}
+                accessibilityRole="button"
+                accessibilityLabel={t('navigation.home')}
+                accessibilityHint="Navigate to home screen"
+              >
                 <Text style={styles.menuIcon}>🏠</Text>
                 <Text style={styles.menuText}>{t('navigation.home')}</Text>
               </TouchableOpacity>
@@ -115,6 +121,9 @@ const HamburgerMenu: React.FC<HamburgerMenuProps> = ({ visible, onClose }) => {
                       categoryName: category.name,
                     })
                   }
+                  accessibilityRole="button"
+                  accessibilityLabel={`${category.name} category`}
+                  accessibilityHint={`View businesses in ${category.name} category`}
                 >
                   <Text style={styles.menuIcon}>{getCategoryIcon(category.name_key)}</Text>
                   <Text style={styles.menuText}>{category.name}</Text>
@@ -125,7 +134,13 @@ const HamburgerMenu: React.FC<HamburgerMenuProps> = ({ visible, onClose }) => {
               <View style={styles.divider} />
 
               {/* Settings */}
-              <TouchableOpacity style={styles.menuItem} onPress={() => handleNavigate('Settings')}>
+              <TouchableOpacity
+                style={styles.menuItem}
+                onPress={() => handleNavigate('Settings')}
+                accessibilityRole="button"
+                accessibilityLabel={t('navigation.settings')}
+                accessibilityHint="Navigate to settings screen"
+              >
                 <Text style={styles.menuIcon}>⚙️</Text>
                 <Text style={styles.menuText}>{t('navigation.settings')}</Text>
               </TouchableOpacity>

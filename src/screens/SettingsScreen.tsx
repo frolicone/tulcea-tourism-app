@@ -57,6 +57,13 @@ const SettingsScreen: React.FC = () => {
                 onPress={() => handleLanguageChange(option.code)}
                 activeOpacity={0.7}
                 disabled={isChangingLanguage}
+                accessibilityRole="button"
+                accessibilityLabel={`${t(`languages.${option.code}`)} language`}
+                accessibilityHint={`Change app language to ${t(`languages.${option.code}`)}`}
+                accessibilityState={{
+                  selected: currentLanguage === option.code,
+                  disabled: isChangingLanguage,
+                }}
               >
                 <Text style={styles.languageFlag}>{option.flag}</Text>
                 <Text
@@ -98,12 +105,23 @@ const SettingsScreen: React.FC = () => {
           style={styles.navButton}
           onPress={() => navigation.navigate('Home')}
           activeOpacity={0.7}
+          accessibilityRole="button"
+          accessibilityLabel={t('navigation.home')}
+          accessibilityHint="Navigate to home"
         >
           <Text style={styles.navIcon}>🏠</Text>
           <Text style={styles.navLabel}>{t('navigation.home')}</Text>
         </TouchableOpacity>
 
-        <TouchableOpacity style={styles.navButton} onPress={() => {}} activeOpacity={0.7}>
+        <TouchableOpacity
+          style={styles.navButton}
+          onPress={() => {}}
+          activeOpacity={0.7}
+          accessibilityRole="button"
+          accessibilityLabel={t('navigation.settings')}
+          accessibilityHint="Settings screen, currently active"
+          accessibilityState={{ selected: true }}
+        >
           <Text style={[styles.navIcon, styles.navIconActive]}>⚙️</Text>
           <Text style={[styles.navLabel, styles.navLabelActive]}>{t('navigation.settings')}</Text>
         </TouchableOpacity>

@@ -69,7 +69,13 @@ const MapScreen: React.FC<Props> = ({ navigation, route }) => {
     return (
       <SafeAreaView style={styles.container}>
         <Text style={styles.errorText}>{error}</Text>
-        <TouchableOpacity style={styles.retryButton} onPress={loadBusinesses}>
+        <TouchableOpacity
+          style={styles.retryButton}
+          onPress={loadBusinesses}
+          accessibilityRole="button"
+          accessibilityLabel={t('common.retry')}
+          accessibilityHint="Retry loading map data"
+        >
           <Text style={styles.retryButtonText}>{t('common.retry')}</Text>
         </TouchableOpacity>
       </SafeAreaView>
@@ -100,6 +106,8 @@ const MapScreen: React.FC<Props> = ({ navigation, route }) => {
             description={business.address}
             pinColor={getMarkerColor(business)}
             onPress={() => handleMarkerPress(business.id)}
+            accessibilityLabel={`${business.name} marker`}
+            accessibilityHint={`Tap to view details for ${business.name}`}
           />
         ))}
       </MapView>

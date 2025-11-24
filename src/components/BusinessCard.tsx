@@ -18,11 +18,16 @@ interface Props {
  * Wrapped in React.memo to prevent unnecessary re-renders in FlatList
  */
 const BusinessCard: React.FC<Props> = memo(({ business, onPress, noImageText }) => {
+  const accessibilityLabel = `${business.name}${business.address ? `, located at ${business.address}` : ''}${business.phone ? `, phone ${business.phone}` : ''}`;
+
   return (
     <TouchableOpacity
       style={styles.card}
       onPress={() => onPress(business.id)}
       activeOpacity={0.7}
+      accessibilityRole="button"
+      accessibilityLabel={accessibilityLabel}
+      accessibilityHint="View business details"
     >
       {business.images && business.images.length > 0 ? (
         <Image

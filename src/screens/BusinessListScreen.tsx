@@ -81,7 +81,13 @@ const BusinessListScreen: React.FC<Props> = ({ navigation, route }) => {
     return (
       <SafeAreaView style={styles.container}>
         <Text style={styles.errorText}>{error}</Text>
-        <TouchableOpacity style={styles.retryButton} onPress={loadBusinesses}>
+        <TouchableOpacity
+          style={styles.retryButton}
+          onPress={loadBusinesses}
+          accessibilityRole="button"
+          accessibilityLabel={t('common.retry')}
+          accessibilityHint="Retry loading businesses"
+        >
           <Text style={styles.retryButtonText}>{t('common.retry')}</Text>
         </TouchableOpacity>
       </SafeAreaView>

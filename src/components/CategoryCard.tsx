@@ -23,6 +23,9 @@ const CategoryCard: React.FC<Props> = memo(({ category, onPress }) => {
       style={styles.card}
       onPress={() => onPress(category)}
       activeOpacity={0.7}
+      accessibilityRole="button"
+      accessibilityLabel={`${category.name} category`}
+      accessibilityHint={`View all businesses in ${category.name} category`}
     >
       <Text style={styles.icon}>{getCategoryIcon(category.name_key)}</Text>
       <Text style={styles.name}>{category.name}</Text>

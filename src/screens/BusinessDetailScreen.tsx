@@ -170,7 +170,13 @@ const BusinessDetailScreen: React.FC<Props> = ({ navigation, route }) => {
     return (
       <SafeAreaView style={styles.container}>
         <Text style={styles.errorText}>{error || t('businessDetail.notFound')}</Text>
-        <TouchableOpacity style={styles.retryButton} onPress={loadBusiness}>
+        <TouchableOpacity
+          style={styles.retryButton}
+          onPress={loadBusiness}
+          accessibilityRole="button"
+          accessibilityLabel={t('common.retry')}
+          accessibilityHint="Retry loading business details"
+        >
           <Text style={styles.retryButtonText}>{t('common.retry')}</Text>
         </TouchableOpacity>
       </SafeAreaView>
@@ -199,6 +205,8 @@ const BusinessDetailScreen: React.FC<Props> = ({ navigation, route }) => {
                   source={{ uri: image }}
                   style={styles.image}
                   resizeMode="cover"
+                  accessible={true}
+                  accessibilityLabel={`${business.name} image ${index + 1} of ${business.images.length}`}
                 />
               ))}
             </ScrollView>
@@ -250,7 +258,14 @@ const BusinessDetailScreen: React.FC<Props> = ({ navigation, route }) => {
           {/* Action buttons */}
           <View style={styles.buttonContainer}>
             {business.phone && (
-              <TouchableOpacity style={styles.callButton} onPress={handleCall} activeOpacity={0.7}>
+              <TouchableOpacity
+                style={styles.callButton}
+                onPress={handleCall}
+                activeOpacity={0.7}
+                accessibilityRole="button"
+                accessibilityLabel={`${t('businessDetail.call')} ${business.name}`}
+                accessibilityHint={`Opens phone dialer to call ${business.phone}`}
+              >
                 <Text style={styles.buttonIcon}>📞</Text>
                 <Text style={styles.buttonText}>{t('businessDetail.call')}</Text>
               </TouchableOpacity>
@@ -263,6 +278,9 @@ const BusinessDetailScreen: React.FC<Props> = ({ navigation, route }) => {
               style={styles.googleMapsButton}
               onPress={handleOpenGoogleMaps}
               activeOpacity={0.7}
+              accessibilityRole="button"
+              accessibilityLabel={t('businessDetail.googleMaps')}
+              accessibilityHint={`Open directions to ${business.name} in Google Maps`}
             >
               <Text style={styles.buttonIcon}>🗺️</Text>
               <Text style={styles.buttonText}>{t('businessDetail.googleMaps')}</Text>
@@ -272,6 +290,9 @@ const BusinessDetailScreen: React.FC<Props> = ({ navigation, route }) => {
               style={styles.wazeButton}
               onPress={handleOpenWaze}
               activeOpacity={0.7}
+              accessibilityRole="button"
+              accessibilityLabel={t('businessDetail.waze')}
+              accessibilityHint={`Open navigation to ${business.name} in Waze`}
             >
               <Text style={styles.buttonIcon}>🚗</Text>
               <Text style={styles.buttonText}>{t('businessDetail.waze')}</Text>
