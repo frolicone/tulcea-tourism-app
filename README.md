@@ -121,17 +121,22 @@ tulcea-tourism-app/
 │       ├── ro.json
 │       ├── fr.json
 │       └── de.json
+├── sql/                  # Database scripts
+│   ├── supabase-setup.sql
+│   ├── supabase-add-categories.sql
+│   └── replace-travel-agency.sql
+├── assets/               # App icons and splash screens
 ├── App.tsx               # Root component
 ├── jest.config.js        # Jest configuration
 ├── jest.setup.js         # Test setup & mocks
-├── CODE_REVIEW_PLAN.md   # Code review results
+├── ASSETS_GUIDE.md       # Icon and splash screen guide
 ├── TESTING_NOTES.md      # Testing documentation
 └── .env.example          # Environment variables template
 ```
 
 ## 🎯 Code Quality & Best Practices
 
-This project follows industry-standard best practices and has undergone comprehensive code review. See [CODE_REVIEW_PLAN.md](CODE_REVIEW_PLAN.md) for detailed analysis.
+This project follows industry-standard best practices and has undergone comprehensive code review (November 2024). All security, performance, accessibility, and testing improvements have been implemented and documented in PROJECT_PLAN.md.
 
 ### Security (OWASP Compliant)
 - ✅ **Input Validation** - All user inputs sanitized with `validation.ts` utilities
@@ -242,9 +247,10 @@ See [PROJECT_PLAN.md](../PROJECT_PLAN.md) for complete roadmap.
 ## 📚 Documentation
 
 - **[CLAUDE.md](CLAUDE.md)** - Development guide for AI assistants
-- **[CODE_REVIEW_PLAN.md](CODE_REVIEW_PLAN.md)** - Comprehensive code review results
 - **[TESTING_NOTES.md](TESTING_NOTES.md)** - Testing infrastructure documentation
-- **[PROJECT_PLAN.md](../PROJECT_PLAN.md)** - Full development roadmap
+- **[ASSETS_GUIDE.md](ASSETS_GUIDE.md)** - App icon and splash screen creation guide
+- **[PROJECT_PLAN.md](../PROJECT_PLAN.md)** - Full development roadmap with code review results
+- **[sql/README.md](sql/README.md)** - Database setup and migration scripts
 
 ## 🤝 Contributing
 
