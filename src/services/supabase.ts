@@ -1,9 +1,9 @@
 // Supabase client configuration
 import { createClient } from '@supabase/supabase-js';
 
-// Get environment variables
-const supabaseUrl = process.env.EXPO_PUBLIC_SUPABASE_URL || '';
-const supabaseAnonKey = process.env.EXPO_PUBLIC_SUPABASE_ANON_KEY || '';
+// Get environment variables (using bracket notation for strictness)
+const supabaseUrl = process.env['EXPO_PUBLIC_SUPABASE_URL'] || '';
+const supabaseAnonKey = process.env['EXPO_PUBLIC_SUPABASE_ANON_KEY'] || '';
 
 // Validate configuration
 if (!supabaseUrl || !supabaseAnonKey) {
@@ -26,9 +26,8 @@ export const getPublicUrl = (bucket: string, path: string): string => {
 };
 
 // Export configuration for debugging (development only)
-// @ts-expect-error - __DEV__ is a global variable in React Native
 const isDevelopment =
-  typeof __DEV__ !== 'undefined' ? __DEV__ : process.env.NODE_ENV === 'development';
+  typeof __DEV__ !== 'undefined' ? __DEV__ : process.env['NODE_ENV'] === 'development';
 
 export const config = isDevelopment
   ? {

@@ -1,6 +1,20 @@
 {
   "extends": "expo/tsconfig.base",
   "compilerOptions": {
-    "strict": true
+    "strict": true,
+
+    // Enhanced strictness for 2025 (pragmatic approach)
+    "noImplicitOverride": true,
+    "noImplicitReturns": true,
+    "noFallthroughCasesInSwitch": true,
+    "forceConsistentCasingInFileNames": true,
+
+    // Enabled but less strict to allow gradual adoption
+    "noUnusedLocals": false,  // Can enable after cleaning up test files
+    "noUnusedParameters": false  // Can enable after cleaning up handlers
+
+    // Note: noUncheckedIndexedAccess, noPropertyAccessFromIndexSignature, and
+    // exactOptionalPropertyTypes require more extensive refactoring.
+    // These can be enabled in future iterations.
   }
 }

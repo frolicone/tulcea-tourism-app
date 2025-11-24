@@ -4,9 +4,8 @@
  */
 
 // Check if running in development mode
-// @ts-expect-error - __DEV__ is a global variable in React Native
 const isDevelopment =
-  typeof __DEV__ !== 'undefined' ? __DEV__ : process.env.NODE_ENV === 'development';
+  typeof __DEV__ !== 'undefined' ? __DEV__ : process.env['NODE_ENV'] === 'development';
 
 /**
  * Logger interface for type-safe logging

@@ -40,7 +40,7 @@ class ErrorBoundary extends Component<Props, State> {
     };
   }
 
-  componentDidCatch(error: Error, errorInfo: ErrorInfo) {
+  override componentDidCatch(error: Error, errorInfo: ErrorInfo) {
     // Log error to monitoring service
     logger.error('ErrorBoundary caught an error:', {
       error: error.toString(),
@@ -57,12 +57,11 @@ class ErrorBoundary extends Component<Props, State> {
     // Reset error boundary state
     this.setState({
       hasError: false,
-      error: undefined,
-      errorInfo: undefined,
     });
   };
 
-  render() {
+  override render() {
+
     if (this.state.hasError) {
       // Check if custom fallback UI is provided
       if (this.props.fallback) {
