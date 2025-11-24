@@ -1,5 +1,5 @@
 // Home screen with category selection
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import {
   View,
   Text,
@@ -16,7 +16,7 @@ import { fetchCategoriesWithTranslations } from '../services/api';
 import type { Category } from '../types';
 import Theme from '../utils/theme';
 import logger from '../utils/logger';
-import { getCategoryIcon } from '../utils/categories';
+import CategoryCard from '../components/CategoryCard';
 
 interface Props {
   navigation: HomeScreenNavigationProp;
@@ -47,20 +47,23 @@ const HomeScreen: React.FC<Props> = ({ navigation }) => {
     }
   };
 
-  const handleCategoryPress = (category: Category & { name: string }) => {
-    navigation.navigate('BusinessList', {
-      categoryId: category.id,
-      categoryName: category.name,
-    });
-  };
+  const handleCategoryPress = useCallback(
+    (category: Category & { name: string }) => {
+      navigation.navigate('BusinessList', {
+        categoryId: category.id,
+        categoryName: category.name,
+      });
+    },
+    [navigation]
+  );
 
-  const handleMapPress = () => {
+  const handleMapPress = useCallback(() => {
     navigation.navigate('Map', {});
-  };
+  }, [navigation]);
 
-  const handleSettingsPress = () => {
+  const handleSettingsPress = useCallback(() => {
     navigation.navigate('Settings');
-  };
+  }, [navigation]);
 
   if (loading) {
     return (
@@ -93,15 +96,11 @@ const HomeScreen: React.FC<Props> = ({ navigation }) => {
           <Text style={styles.sectionTitle}>{t('home.exploreCategories')}</Text>
           <View style={styles.categoryGrid}>
             {categories.map((category) => (
-              <TouchableOpacity
+              <CategoryCard
                 key={category.id}
-                style={styles.categoryCard}
-                onPress={() => handleCategoryPress(category)}
-                activeOpacity={0.7}
-              >
-                <Text style={styles.categoryIcon}>{getCategoryIcon(category.name_key)}</Text>
-                <Text style={styles.categoryName}>{category.name}</Text>
-              </TouchableOpacity>
+                category={category}
+                onPress={handleCategoryPress}
+              />
             ))}
           </View>
         </View>
@@ -165,25 +164,6 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     flexWrap: 'wrap',
     justifyContent: 'space-between',
-  },
-  categoryCard: {
-    width: '48%',
-    backgroundColor: Theme.colors.primary,
-    borderRadius: Theme.borderRadius.lg,
-    padding: Theme.spacing.lg,
-    alignItems: 'center',
-    marginBottom: Theme.spacing.md,
-    ...Theme.elevation.medium,
-  },
-  categoryIcon: {
-    fontSize: 48,
-    marginBottom: Theme.spacing.sm,
-  },
-  categoryName: {
-    ...Theme.typography.body,
-    color: Theme.colors.textOnPrimary,
-    fontWeight: '600',
-    textAlign: 'center',
   },
   mapButton: {
     backgroundColor: Theme.colors.accent,

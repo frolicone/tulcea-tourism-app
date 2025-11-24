@@ -1,5 +1,5 @@
 // Map screen showing all businesses
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import { View, Text, StyleSheet, ActivityIndicator, TouchableOpacity } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import MapView, { Marker, PROVIDER_GOOGLE } from 'react-native-maps';
@@ -45,14 +45,17 @@ const MapScreen: React.FC<Props> = ({ navigation, route }) => {
     }
   };
 
-  const handleMarkerPress = (businessId: string) => {
-    navigation.navigate('BusinessDetail', { businessId });
-  };
+  const handleMarkerPress = useCallback(
+    (businessId: string) => {
+      navigation.navigate('BusinessDetail', { businessId });
+    },
+    [navigation]
+  );
 
-  const getMarkerColor = (_business: BusinessWithTranslation): string => {
+  const getMarkerColor = useCallback((_business: BusinessWithTranslation): string => {
     // You can customize marker colors by category in the future
     return Theme.colors.primary;
-  };
+  }, []);
 
   if (loading) {
     return (
