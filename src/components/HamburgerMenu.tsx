@@ -18,6 +18,7 @@ import type { Category } from '../types';
 import type { HomeScreenNavigationProp } from '../navigation/types';
 import Theme from '../utils/theme';
 import logger from '../utils/logger';
+import { getCategoryIcon } from '../utils/categories';
 
 interface HamburgerMenuProps {
   visible: boolean;
@@ -47,7 +48,7 @@ const HamburgerMenu: React.FC<HamburgerMenuProps> = ({ visible, onClose }) => {
   useEffect(() => {
     if (visible) {
       // Load categories asynchronously - setState in async function is safe
-      // eslint-disable-next-line react-hooks/exhaustive-deps
+      // eslint-disable-next-line
       loadCategories().catch((err) => logger.error('Failed to load categories', err));
       Animated.timing(slideAnim, {
         toValue: 0,
@@ -65,6 +66,7 @@ const HamburgerMenu: React.FC<HamburgerMenuProps> = ({ visible, onClose }) => {
 
   useEffect(() => {
     // Async setState is safe here - loadCategories is properly memoized
+    // eslint-disable-next-line
     loadCategories().catch((err) => logger.error('Failed to load categories', err));
   }, [loadCategories]);
 
@@ -73,21 +75,6 @@ const HamburgerMenu: React.FC<HamburgerMenuProps> = ({ visible, onClose }) => {
     setTimeout(() => {
       navigation.navigate(screen as any, params);
     }, 250);
-  };
-
-  const getCategoryIcon = (nameKey: string): string => {
-    switch (nameKey) {
-      case 'travel_agencies':
-        return '✈️';
-      case 'accommodation':
-        return '🏨';
-      case 'restaurants':
-        return '🍽️';
-      case 'bank_atms':
-        return '🏧';
-      default:
-        return '📍';
-    }
   };
 
   return (

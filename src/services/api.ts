@@ -3,13 +3,34 @@ import { supabase } from './supabase';
 import type { Category, CategoryTranslation, BusinessWithTranslation, Language } from '../types';
 import { sanitizeSearchQuery, isValidUUID } from '../utils/validation';
 import { logApiError } from '../utils/logger';
+import { API_CONFIG } from '../utils/constants';
 
 /**
- * Fetch all categories
+ * Wraps a promise with a timeout to prevent indefinite hanging
+ * @param promise - The promise to wrap
+ * @param timeoutMs - Timeout in milliseconds (default from API_CONFIG)
+ * @returns Promise that rejects if timeout is reached
+ */
+const withTimeout = async <T>(
+  promise: Promise<T>,
+  timeoutMs: number = API_CONFIG.TIMEOUT
+): Promise<T> => {
+  const timeout = new Promise<never>((_, reject) =>
+    setTimeout(() => reject(new Error('Request timeout')), timeoutMs)
+  );
+  return Promise.race([promise, timeout]);
+};
+
+/**
+ * Fetches all business categories from the database
+ * @returns Promise resolving to array of categories
+ * @throws Error if database query fails or times out
  */
 export const fetchCategories = async (): Promise<Category[]> => {
   try {
-    const { data, error } = await supabase.from('categories').select('*').order('created_at');
+    const { data, error } = await withTimeout(
+      supabase.from('categories').select('*').order('created_at')
+    );
 
     if (error) throw error;
     return data || [];
@@ -20,16 +41,18 @@ export const fetchCategories = async (): Promise<Category[]> => {
 };
 
 /**
- * Fetch category translations for a specific language
+ * Fetches category name translations for a specific language
+ * @param language - Language code (en, ro, fr, de)
+ * @returns Promise resolving to array of category translations
+ * @throws Error if database query fails or times out
  */
 export const fetchCategoryTranslations = async (
   language: Language
 ): Promise<CategoryTranslation[]> => {
   try {
-    const { data, error } = await supabase
-      .from('category_translations')
-      .select('*')
-      .eq('language', language);
+    const { data, error } = await withTimeout(
+      supabase.from('category_translations').select('*').eq('language', language)
+    );
 
     if (error) throw error;
     return data || [];
@@ -40,7 +63,11 @@ export const fetchCategoryTranslations = async (
 };
 
 /**
- * Fetch categories with translations for a specific language
+ * Fetches categories with their translated names merged
+ * Combines category data with translations for the specified language
+ * @param language - Language code (en, ro, fr, de)
+ * @returns Promise resolving to array of categories with name property
+ * @throws Error if database query fails or times out
  */
 export const fetchCategoriesWithTranslations = async (
   language: Language
@@ -64,7 +91,12 @@ export const fetchCategoriesWithTranslations = async (
 };
 
 /**
- * Fetch businesses by category
+ * Fetches all active businesses in a specific category with translations
+ * Only returns businesses where is_active = true
+ * @param categoryId - UUID of the category
+ * @param language - Language code (en, ro, fr, de)
+ * @returns Promise resolving to array of businesses with translated fields
+ * @throws Error if categoryId is invalid or database query fails
  */
 export const fetchBusinessesByCategory = async (
   categoryId: string,
@@ -77,12 +109,14 @@ export const fetchBusinessesByCategory = async (
     }
 
     // Fetch businesses
-    const { data: businesses, error: businessError } = await supabase
-      .from('businesses')
-      .select('*')
-      .eq('category_id', categoryId)
-      .eq('is_active', true)
-      .order('created_at');
+    const { data: businesses, error: businessError } = await withTimeout(
+      supabase
+        .from('businesses')
+        .select('*')
+        .eq('category_id', categoryId)
+        .eq('is_active', true)
+        .order('created_at')
+    );
 
     if (businessError) throw businessError;
 
@@ -92,11 +126,13 @@ export const fetchBusinessesByCategory = async (
 
     // Fetch translations for these businesses
     const businessIds = businesses.map((b) => b.id);
-    const { data: translations, error: translationError } = await supabase
-      .from('business_translations')
-      .select('*')
-      .in('business_id', businessIds)
-      .eq('language', language);
+    const { data: translations, error: translationError } = await withTimeout(
+      supabase
+        .from('business_translations')
+        .select('*')
+        .in('business_id', businessIds)
+        .eq('language', language)
+    );
 
     if (translationError) throw translationError;
 
@@ -117,7 +153,12 @@ export const fetchBusinessesByCategory = async (
 };
 
 /**
- * Fetch a single business with translation
+ * Fetches a single business by ID with translated fields
+ * Only returns business if is_active = true
+ * @param businessId - UUID of the business
+ * @param language - Language code (en, ro, fr, de)
+ * @returns Promise resolving to business with translations, or null if not found
+ * @throws Error if businessId is invalid or database query fails
  */
 export const fetchBusinessById = async (
   businessId: string,
@@ -130,23 +171,22 @@ export const fetchBusinessById = async (
     }
 
     // Fetch business
-    const { data: business, error: businessError } = await supabase
-      .from('businesses')
-      .select('*')
-      .eq('id', businessId)
-      .eq('is_active', true)
-      .single();
+    const { data: business, error: businessError } = await withTimeout(
+      supabase.from('businesses').select('*').eq('id', businessId).eq('is_active', true).single()
+    );
 
     if (businessError) throw businessError;
     if (!business) return null;
 
     // Fetch translation
-    const { data: translation, error: translationError } = await supabase
-      .from('business_translations')
-      .select('*')
-      .eq('business_id', businessId)
-      .eq('language', language)
-      .single();
+    const { data: translation, error: translationError } = await withTimeout(
+      supabase
+        .from('business_translations')
+        .select('*')
+        .eq('business_id', businessId)
+        .eq('language', language)
+        .single()
+    );
 
     if (translationError && translationError.code !== 'PGRST116') {
       // PGRST116 = no rows returned, which is okay
@@ -166,18 +206,20 @@ export const fetchBusinessById = async (
 };
 
 /**
- * Fetch all active businesses (for map view)
+ * Fetches all active businesses with translations for map display
+ * Used by MapScreen to show all businesses regardless of category
+ * @param language - Language code (en, ro, fr, de)
+ * @returns Promise resolving to array of businesses with translated fields
+ * @throws Error if database query fails or times out
  */
 export const fetchAllBusinesses = async (
   language: Language
 ): Promise<BusinessWithTranslation[]> => {
   try {
     // Fetch all active businesses
-    const { data: businesses, error: businessError } = await supabase
-      .from('businesses')
-      .select('*')
-      .eq('is_active', true)
-      .order('created_at');
+    const { data: businesses, error: businessError } = await withTimeout(
+      supabase.from('businesses').select('*').eq('is_active', true).order('created_at')
+    );
 
     if (businessError) throw businessError;
 
@@ -187,11 +229,13 @@ export const fetchAllBusinesses = async (
 
     // Fetch all translations
     const businessIds = businesses.map((b) => b.id);
-    const { data: translations, error: translationError } = await supabase
-      .from('business_translations')
-      .select('*')
-      .in('business_id', businessIds)
-      .eq('language', language);
+    const { data: translations, error: translationError } = await withTimeout(
+      supabase
+        .from('business_translations')
+        .select('*')
+        .in('business_id', businessIds)
+        .eq('language', language)
+    );
 
     if (translationError) throw translationError;
 
@@ -212,7 +256,14 @@ export const fetchAllBusinesses = async (
 };
 
 /**
- * Search businesses by name (in current language)
+ * Searches businesses by name using case-insensitive partial matching
+ * Input is sanitized and requires minimum 2 characters
+ * @param query - Search query string
+ * @param language - Language code (en, ro, fr, de)
+ * @returns Promise resolving to array of matching businesses with translations
+ * @throws Error if database query fails or times out
+ * @example
+ * const results = await searchBusinesses('hotel', 'en');
  */
 export const searchBusinesses = async (
   query: string,
@@ -230,11 +281,13 @@ export const searchBusinesses = async (
     }
 
     // First, search in translations
-    const { data: translations, error: translationError } = await supabase
-      .from('business_translations')
-      .select('business_id')
-      .eq('language', language)
-      .ilike('name', `%${sanitizedQuery}%`);
+    const { data: translations, error: translationError } = await withTimeout(
+      supabase
+        .from('business_translations')
+        .select('business_id')
+        .eq('language', language)
+        .ilike('name', `%${sanitizedQuery}%`)
+    );
 
     if (translationError) throw translationError;
 
@@ -246,11 +299,9 @@ export const searchBusinesses = async (
     const businessIds = translations.map((t) => t.business_id);
 
     // Fetch the full businesses
-    const { data: businesses, error: businessError } = await supabase
-      .from('businesses')
-      .select('*')
-      .in('id', businessIds)
-      .eq('is_active', true);
+    const { data: businesses, error: businessError } = await withTimeout(
+      supabase.from('businesses').select('*').in('id', businessIds).eq('is_active', true)
+    );
 
     if (businessError) throw businessError;
 
@@ -259,11 +310,13 @@ export const searchBusinesses = async (
     }
 
     // Fetch all translations for these businesses
-    const { data: allTranslations, error: allTranslationError } = await supabase
-      .from('business_translations')
-      .select('*')
-      .in('business_id', businessIds)
-      .eq('language', language);
+    const { data: allTranslations, error: allTranslationError } = await withTimeout(
+      supabase
+        .from('business_translations')
+        .select('*')
+        .in('business_id', businessIds)
+        .eq('language', language)
+    );
 
     if (allTranslationError) throw allTranslationError;
 

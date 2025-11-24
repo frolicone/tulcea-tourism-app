@@ -16,6 +16,7 @@ import { fetchCategoriesWithTranslations } from '../services/api';
 import type { Category } from '../types';
 import Theme from '../utils/theme';
 import logger from '../utils/logger';
+import { getCategoryIcon } from '../utils/categories';
 
 interface Props {
   navigation: HomeScreenNavigationProp;
@@ -59,21 +60,6 @@ const HomeScreen: React.FC<Props> = ({ navigation }) => {
 
   const handleSettingsPress = () => {
     navigation.navigate('Settings');
-  };
-
-  const getCategoryIcon = (nameKey: string): string => {
-    switch (nameKey) {
-      case 'travel_agencies':
-        return '✈️';
-      case 'accommodation':
-        return '🏨';
-      case 'restaurants':
-        return '🍽️';
-      case 'bank_atms':
-        return '🏧';
-      default:
-        return '📍';
-    }
   };
 
   if (loading) {

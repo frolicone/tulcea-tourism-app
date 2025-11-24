@@ -26,7 +26,7 @@ export const getPublicUrl = (bucket: string, path: string): string => {
 };
 
 // Export configuration for debugging (development only)
-// @ts-ignore - __DEV__ is a global variable in React Native
+// @ts-expect-error - __DEV__ is a global variable in React Native
 const isDevelopment =
   typeof __DEV__ !== 'undefined' ? __DEV__ : process.env.NODE_ENV === 'development';
 
