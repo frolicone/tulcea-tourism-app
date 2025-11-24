@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="1024" height="1024" viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg">
+  <!--
+    Tulcea Tourism App - Adaptive Icon Template (Android)
+    IMPORTANT: Keep all content within the center 66% circle (red guide)
+    Background color #1E88E5 is set in app.json
+
+    Export Instructions:
+    1. Remove guide circles (red dashed line)
+    2. Export as PNG 1024x1024 WITH TRANSPARENCY
+    3. Save as adaptive-icon.png
+  -->
+
+  <!-- Background (transparent - actual color comes from app.json) -->
+  <rect width="1024" height="1024" fill="none"/>
+
+  <!-- Safe zone guide - 66% center (remove before export) -->
+  <circle cx="512" cy="512" r="338" fill="none" stroke="#FF0000" stroke-width="3" stroke-dasharray="15,15"/>
+  <text x="512" y="180" font-family="Arial" font-size="28" fill="#FF0000" text-anchor="middle" font-weight="bold">
+    ⚠️ KEEP CONTENT INSIDE THIS CIRCLE (66%)
+  </text>
+
+  <!-- Foreground Icon (what appears on top of blue background) -->
+  <g id="foreground-icon">
+
+    <!-- Location Pin (Simplified for Adaptive Icon) -->
+    <g transform="translate(512, 512)">
+
+      <!-- Pin Body (white with blue outline) -->
+      <path d="M 0,-120
+               C -60,-120 -110,-70 -110,0
+               C -110,60 0,180 0,180
+               C 0,180 110,60 110,0
+               C 110,-70 60,-120 0,-120 Z"
+            fill="#FFFFFF"
+            stroke="#1E88E5"
+            stroke-width="10"/>
+
+      <!-- Inner Circle (blue) -->
+      <circle cx="0" cy="0" r="55" fill="#1E88E5"/>
+
+      <!-- Boat icon (white) -->
+      <g transform="scale(1.2)">
+        <path d="M -15,5 L -15,-10 L 15,-10 L 15,5 L 10,10 L -10,10 Z"
+              fill="#FFFFFF"/>
+        <path d="M -3,-10 L 0,-20 L 3,-10"
+              stroke="#FFFFFF"
+              stroke-width="3"
+              fill="none"
+              stroke-linecap="round"/>
+      </g>
+
+      <!-- Small waves at bottom of pin -->
+      <g transform="translate(0, 150)" opacity="0.7">
+        <path d="M -40,0 Q -30,-8 -20,0 T 0,0 T 20,0 T 40,0"
+              stroke="#FFFFFF"
+              stroke-width="5"
+              fill="none"
+              stroke-linecap="round"/>
+        <path d="M -40,12 Q -30,4 -20,12 T 0,12 T 20,12 T 40,12"
+              stroke="#FFFFFF"
+              stroke-width="5"
+              fill="none"
+              stroke-linecap="round"/>
+      </g>
+
+    </g>
+
+  </g>
+
+  <!-- Center point guide (remove before export) -->
+  <circle cx="512" cy="512" r="5" fill="#FF0000"/>
+
+</svg>

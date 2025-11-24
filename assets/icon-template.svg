@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="1024" height="1024" viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg">
+  <!--
+    Tulcea Tourism App Icon Template
+    Design: Location pin with water wave
+    Colors: Blue (#1E88E5) and White
+
+    To use:
+    1. Open in Figma, Inkscape, or any SVG editor
+    2. Customize colors, shapes as needed
+    3. Export as PNG 1024x1024 with transparency
+    4. Save as icon.png in assets folder
+  -->
+
+  <!-- Background Circle (optional - can be transparent) -->
+  <circle cx="512" cy="512" r="512" fill="#FFFFFF"/>
+
+  <!-- Safe zone guide (remove before export) -->
+  <circle cx="512" cy="512" r="410" fill="none" stroke="#CCCCCC" stroke-width="2" stroke-dasharray="10,10"/>
+
+  <!-- Main Icon Group -->
+  <g id="main-icon">
+
+    <!-- Wave Pattern (bottom) -->
+    <g id="waves">
+      <!-- Wave 1 (back) -->
+      <path d="M 150 700 Q 256 650, 362 700 T 574 700 T 786 700 T 998 700 L 998 850 L 150 850 Z"
+            fill="#64B5F6" opacity="0.5"/>
+
+      <!-- Wave 2 (middle) -->
+      <path d="M 100 750 Q 206 700, 312 750 T 524 750 T 736 750 T 948 750 L 948 900 L 100 900 Z"
+            fill="#42A5F5" opacity="0.7"/>
+
+      <!-- Wave 3 (front) -->
+      <path d="M 50 800 Q 156 750, 262 800 T 474 800 T 686 800 T 898 800 L 898 950 L 50 950 Z"
+            fill="#1E88E5"/>
+    </g>
+
+    <!-- Location Pin -->
+    <g id="location-pin" transform="translate(512, 300)">
+      <!-- Pin Shadow -->
+      <ellipse cx="0" cy="280" rx="60" ry="20" fill="#000000" opacity="0.2"/>
+
+      <!-- Pin Body -->
+      <path d="M 0,-150
+               C -80,-150 -150,-80 -150,0
+               C -150,80 0,250 0,250
+               C 0,250 150,80 150,0
+               C 150,-80 80,-150 0,-150 Z"
+            fill="#1E88E5"
+            stroke="#FFFFFF"
+            stroke-width="8"/>
+
+      <!-- Inner Circle (white) -->
+      <circle cx="0" cy="0" r="70" fill="#FFFFFF"/>
+
+      <!-- Inner Pin Icon (blue) -->
+      <circle cx="0" cy="0" r="50" fill="#1E88E5"/>
+
+      <!-- Mini boat icon inside pin (white) -->
+      <g transform="scale(0.8)">
+        <path d="M -20,10 L -20,-15 L 20,-15 L 20,10 L 15,15 L -15,15 Z"
+              fill="#FFFFFF"/>
+        <path d="M -5,-15 L 0,-30 L 5,-15"
+              stroke="#FFFFFF"
+              stroke-width="3"
+              fill="none"/>
+      </g>
+    </g>
+
+    <!-- App Name Text (optional - remove for cleaner icon) -->
+    <!-- <text x="512" y="950" font-family="Arial, sans-serif" font-size="60" font-weight="bold"
+          fill="#1E88E5" text-anchor="middle">TULCEA</text> -->
+
+  </g>
+
+  <!-- Adaptive Icon Safe Zone Guide (66% center circle - remove before export) -->
+  <circle cx="512" cy="512" r="338" fill="none" stroke="#FF0000" stroke-width="3" stroke-dasharray="15,15" opacity="0.5"/>
+  <text x="512" y="180" font-family="Arial" font-size="24" fill="#FF0000" text-anchor="middle" opacity="0.5">
+    Adaptive Icon Safe Zone (66%)
+  </text>
+
+</svg>

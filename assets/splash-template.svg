@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="2048" height="2048" viewBox="0 0 2048 2048" xmlns="http://www.w3.org/2000/svg">
+  <!--
+    Tulcea Tourism App - Splash Screen Template
+    Background color #1E88E5 is set in app.json (fills whole screen)
+    This image is centered on that blue background
+
+    Export Instructions:
+    1. Remove guide rectangles
+    2. Export as PNG 2048x2048 WITH TRANSPARENCY
+    3. Save as splash-icon.png
+  -->
+
+  <!-- Background (transparent - actual color comes from app.json #1E88E5) -->
+  <rect width="2048" height="2048" fill="none"/>
+
+  <!-- Safe zone guides (remove before export) -->
+  <!-- Top safe zone (notch area) -->
+  <rect x="0" y="0" width="2048" height="200" fill="none" stroke="#FF0000" stroke-width="2" stroke-dasharray="10,10" opacity="0.3"/>
+  <!-- Bottom safe zone -->
+  <rect x="0" y="1848" width="2048" height="200" fill="none" stroke="#FF0000" stroke-width="2" stroke-dasharray="10,10" opacity="0.3"/>
+
+  <!-- Main Splash Content -->
+  <g id="splash-content" transform="translate(1024, 1024)">
+
+    <!-- Logo Circle Background (white) -->
+    <circle cx="0" cy="-100" r="280" fill="#FFFFFF" opacity="0.95"/>
+
+    <!-- Location Pin Icon (blue) -->
+    <g transform="translate(0, -100)">
+      <path d="M 0,-180
+               C -90,-180 -160,-110 -160,0
+               C -160,90 0,280 0,280
+               C 0,280 160,90 160,0
+               C 160,-110 90,-180 0,-180 Z"
+            fill="#1E88E5"/>
+
+      <!-- Inner white circle -->
+      <circle cx="0" cy="0" r="85" fill="#FFFFFF"/>
+
+      <!-- Inner blue circle with boat -->
+      <circle cx="0" cy="0" r="65" fill="#1E88E5"/>
+
+      <!-- Boat icon (white) -->
+      <g transform="scale(1.8)">
+        <path d="M -15,5 L -15,-10 L 15,-10 L 15,5 L 10,10 L -10,10 Z"
+              fill="#FFFFFF"/>
+        <path d="M -3,-10 L 0,-22 L 3,-10"
+              stroke="#FFFFFF"
+              stroke-width="3"
+              fill="none"
+              stroke-linecap="round"/>
+      </g>
+    </g>
+
+    <!-- Water Waves (decorative) -->
+    <g transform="translate(0, 250)">
+      <path d="M -400,0 Q -300,-40 -200,0 T 0,0 T 200,0 T 400,0"
+            stroke="#FFFFFF"
+            stroke-width="12"
+            fill="none"
+            stroke-linecap="round"
+            opacity="0.4"/>
+      <path d="M -400,40 Q -300,0 -200,40 T 0,40 T 200,40 T 400,40"
+            stroke="#FFFFFF"
+            stroke-width="12"
+            fill="none"
+            stroke-linecap="round"
+            opacity="0.3"/>
+      <path d="M -400,80 Q -300,40 -200,80 T 0,80 T 200,80 T 400,80"
+            stroke="#FFFFFF"
+            stroke-width="12"
+            fill="none"
+            stroke-linecap="round"
+            opacity="0.2"/>
+    </g>
+
+    <!-- App Name -->
+    <text x="0" y="420"
+          font-family="Arial, Helvetica, sans-serif"
+          font-size="120"
+          font-weight="bold"
+          fill="#FFFFFF"
+          text-anchor="middle"
+          letter-spacing="8">
+      TULCEA
+    </text>
+
+    <!-- Subtitle -->
+    <text x="0" y="520"
+          font-family="Arial, Helvetica, sans-serif"
+          font-size="60"
+          font-weight="normal"
+          fill="#FFFFFF"
+          text-anchor="middle"
+          opacity="0.9"
+          letter-spacing="4">
+      Tourism Guide
+    </text>
+
+    <!-- Tagline (optional) -->
+    <text x="0" y="620"
+          font-family="Arial, Helvetica, sans-serif"
+          font-size="40"
+          font-weight="300"
+          fill="#FFFFFF"
+          text-anchor="middle"
+          opacity="0.7"
+          letter-spacing="2">
+      Discover the Danube Delta
+    </text>
+
+  </g>
+
+  <!-- Center guide (remove before export) -->
+  <line x1="1024" y1="0" x2="1024" y2="2048" stroke="#FF0000" stroke-width="2" stroke-dasharray="5,5" opacity="0.2"/>
+  <line x1="0" y1="1024" x2="2048" y2="1024" stroke="#FF0000" stroke-width="2" stroke-dasharray="5,5" opacity="0.2"/>
+
+</svg>
