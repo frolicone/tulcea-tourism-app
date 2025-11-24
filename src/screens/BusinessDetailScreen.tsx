@@ -13,6 +13,8 @@ import {
   Dimensions,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { useTranslation } from 'react-i18next';
+import { useLanguage } from '../contexts/LanguageContext';
 import type {
   BusinessDetailScreenNavigationProp,
   BusinessDetailScreenRouteProp,
@@ -20,6 +22,8 @@ import type {
 import { fetchBusinessById } from '../services/api';
 import type { BusinessWithTranslation } from '../types';
 import Theme from '../utils/theme';
+import { isValidPhoneNumber, isValidHttpUrl } from '../utils/validation';
+import logger from '../utils/logger';
 
 interface Props {
   navigation: BusinessDetailScreenNavigationProp;
@@ -29,6 +33,8 @@ interface Props {
 const { width: screenWidth } = Dimensions.get('window');
 
 const BusinessDetailScreen: React.FC<Props> = ({ navigation, route }) => {
+  const { t } = useTranslation();
+  const { currentLanguage } = useLanguage();
   const { businessId } = route.params;
   const [business, setBusiness] = useState<BusinessWithTranslation | null>(null);
   const [loading, setLoading] = useState(true);
@@ -37,49 +43,119 @@ const BusinessDetailScreen: React.FC<Props> = ({ navigation, route }) => {
 
   useEffect(() => {
     loadBusiness();
-  }, [businessId]);
+  }, [businessId, currentLanguage]);
 
   const loadBusiness = async () => {
     try {
       setLoading(true);
       setError(null);
-      const data = await fetchBusinessById(businessId, 'en');
+      const data = await fetchBusinessById(businessId, currentLanguage);
       if (data) {
         setBusiness(data);
         // Set header title to business name
         navigation.setOptions({ title: data.name });
       } else {
-        setError('Business not found');
+        setError(t('businessDetail.notFound'));
       }
     } catch (err) {
-      console.error('Failed to load business:', err);
-      setError('Failed to load business details. Please try again.');
+      logger.error('Failed to load business:', err);
+      setError(t('businessDetail.error'));
     } finally {
       setLoading(false);
     }
   };
 
   const handleCall = () => {
-    if (business?.phone) {
-      const phoneNumber = business.phone.replace(/\s/g, '');
-      Linking.openURL(`tel:${phoneNumber}`);
+    if (!business?.phone) {
+      return;
     }
+
+    const phoneNumber = business.phone.replace(/\s/g, '');
+
+    // Validate phone number before attempting to call
+    if (!isValidPhoneNumber(phoneNumber)) {
+      Alert.alert(t('businessDetail.error'), 'Invalid phone number format', [{ text: 'OK' }]);
+      logger.warn('Invalid phone number:', phoneNumber);
+      return;
+    }
+
+    const telUrl = `tel:${phoneNumber}`;
+    Linking.canOpenURL(telUrl)
+      .then((supported) => {
+        if (supported) {
+          return Linking.openURL(telUrl);
+        } else {
+          Alert.alert(t('businessDetail.error'), 'Phone dialing is not supported on this device', [
+            { text: 'OK' },
+          ]);
+        }
+      })
+      .catch((error) => {
+        logger.error('Error opening phone dialer:', error);
+        Alert.alert(t('businessDetail.error'), 'Failed to open phone dialer', [{ text: 'OK' }]);
+      });
   };
 
   const handleOpenGoogleMaps = () => {
-    if (business) {
-      const { latitude, longitude } = business;
-      const url = `https://www.google.com/maps/dir/?api=1&destination=${latitude},${longitude}`;
-      Linking.openURL(url);
+    if (!business) {
+      return;
     }
+
+    const { latitude, longitude } = business;
+    const url = `https://www.google.com/maps/dir/?api=1&destination=${latitude},${longitude}`;
+
+    // Validate URL before opening
+    if (!isValidHttpUrl(url)) {
+      Alert.alert(t('businessDetail.error'), 'Invalid navigation URL', [{ text: 'OK' }]);
+      logger.warn('Invalid Google Maps URL:', url);
+      return;
+    }
+
+    Linking.canOpenURL(url)
+      .then((supported) => {
+        if (supported) {
+          return Linking.openURL(url);
+        } else {
+          Alert.alert(t('businessDetail.error'), 'Google Maps is not available on this device', [
+            { text: 'OK' },
+          ]);
+        }
+      })
+      .catch((error) => {
+        logger.error('Error opening Google Maps:', error);
+        Alert.alert(t('businessDetail.error'), 'Failed to open Google Maps', [{ text: 'OK' }]);
+      });
   };
 
   const handleOpenWaze = () => {
-    if (business) {
-      const { latitude, longitude } = business;
-      const url = `https://waze.com/ul?ll=${latitude},${longitude}&navigate=yes`;
-      Linking.openURL(url);
+    if (!business) {
+      return;
     }
+
+    const { latitude, longitude } = business;
+    const url = `https://waze.com/ul?ll=${latitude},${longitude}&navigate=yes`;
+
+    // Validate URL before opening
+    if (!isValidHttpUrl(url)) {
+      Alert.alert(t('businessDetail.error'), 'Invalid navigation URL', [{ text: 'OK' }]);
+      logger.warn('Invalid Waze URL:', url);
+      return;
+    }
+
+    Linking.canOpenURL(url)
+      .then((supported) => {
+        if (supported) {
+          return Linking.openURL(url);
+        } else {
+          Alert.alert(t('businessDetail.error'), 'Waze is not available on this device', [
+            { text: 'OK' },
+          ]);
+        }
+      })
+      .catch((error) => {
+        logger.error('Error opening Waze:', error);
+        Alert.alert(t('businessDetail.error'), 'Failed to open Waze', [{ text: 'OK' }]);
+      });
   };
 
   if (loading) {
@@ -93,9 +169,9 @@ const BusinessDetailScreen: React.FC<Props> = ({ navigation, route }) => {
   if (error || !business) {
     return (
       <SafeAreaView style={styles.container}>
-        <Text style={styles.errorText}>{error || 'Business not found'}</Text>
+        <Text style={styles.errorText}>{error || t('businessDetail.notFound')}</Text>
         <TouchableOpacity style={styles.retryButton} onPress={loadBusiness}>
-          <Text style={styles.retryButtonText}>Retry</Text>
+          <Text style={styles.retryButtonText}>{t('common.retry')}</Text>
         </TouchableOpacity>
       </SafeAreaView>
     );
@@ -112,9 +188,7 @@ const BusinessDetailScreen: React.FC<Props> = ({ navigation, route }) => {
               pagingEnabled
               showsHorizontalScrollIndicator={false}
               onScroll={(e) => {
-                const index = Math.round(
-                  e.nativeEvent.contentOffset.x / screenWidth
-                );
+                const index = Math.round(e.nativeEvent.contentOffset.x / screenWidth);
                 setCurrentImageIndex(index);
               }}
               scrollEventThrottle={16}
@@ -144,7 +218,7 @@ const BusinessDetailScreen: React.FC<Props> = ({ navigation, route }) => {
           </View>
         ) : (
           <View style={styles.placeholderImage}>
-            <Text style={styles.placeholderText}>No Images Available</Text>
+            <Text style={styles.placeholderText}>{t('businessDetail.noImages')}</Text>
           </View>
         )}
 
@@ -168,7 +242,7 @@ const BusinessDetailScreen: React.FC<Props> = ({ navigation, route }) => {
 
           {business.description && (
             <View style={styles.descriptionContainer}>
-              <Text style={styles.sectionTitle}>About</Text>
+              <Text style={styles.sectionTitle}>{t('businessDetail.about')}</Text>
               <Text style={styles.description}>{business.description}</Text>
             </View>
           )}
@@ -176,13 +250,9 @@ const BusinessDetailScreen: React.FC<Props> = ({ navigation, route }) => {
           {/* Action buttons */}
           <View style={styles.buttonContainer}>
             {business.phone && (
-              <TouchableOpacity
-                style={styles.callButton}
-                onPress={handleCall}
-                activeOpacity={0.7}
-              >
+              <TouchableOpacity style={styles.callButton} onPress={handleCall} activeOpacity={0.7}>
                 <Text style={styles.buttonIcon}>📞</Text>
-                <Text style={styles.buttonText}>Call</Text>
+                <Text style={styles.buttonText}>{t('businessDetail.call')}</Text>
               </TouchableOpacity>
             )}
           </View>
@@ -195,7 +265,7 @@ const BusinessDetailScreen: React.FC<Props> = ({ navigation, route }) => {
               activeOpacity={0.7}
             >
               <Text style={styles.buttonIcon}>🗺️</Text>
-              <Text style={styles.buttonText}>Google Maps</Text>
+              <Text style={styles.buttonText}>{t('businessDetail.googleMaps')}</Text>
             </TouchableOpacity>
 
             <TouchableOpacity
@@ -204,14 +274,15 @@ const BusinessDetailScreen: React.FC<Props> = ({ navigation, route }) => {
               activeOpacity={0.7}
             >
               <Text style={styles.buttonIcon}>🚗</Text>
-              <Text style={styles.buttonText}>Waze</Text>
+              <Text style={styles.buttonText}>{t('businessDetail.waze')}</Text>
             </TouchableOpacity>
           </View>
 
           {/* GPS coordinates */}
           <View style={styles.coordinatesContainer}>
             <Text style={styles.coordinatesText}>
-              GPS: {business.latitude.toFixed(6)}, {business.longitude.toFixed(6)}
+              {t('businessDetail.gps')}: {business.latitude.toFixed(6)},{' '}
+              {business.longitude.toFixed(6)}
             </Text>
           </View>
         </View>

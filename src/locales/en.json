@@ -1,0 +1,59 @@
+{
+  "app": {
+    "name": "Tulcea Tourism"
+  },
+  "navigation": {
+    "home": "Home",
+    "businessDetails": "Business Details",
+    "mapView": "Map View",
+    "settings": "Settings"
+  },
+  "home": {
+    "welcome": "Welcome to Tulcea",
+    "subtitle": "Discover the Danube Delta",
+    "exploreCategories": "Explore Categories",
+    "viewAllOnMap": "View All on Map",
+    "error": "Failed to load categories. Please try again."
+  },
+  "businessList": {
+    "noImage": "No Image",
+    "noBusiness": "No businesses found in this category yet.",
+    "loading": "Loading businesses...",
+    "error": "Failed to load businesses. Please try again."
+  },
+  "businessDetail": {
+    "notFound": "Business not found",
+    "noImages": "No Images Available",
+    "about": "About",
+    "call": "Call",
+    "googleMaps": "Google Maps",
+    "waze": "Waze",
+    "gps": "GPS",
+    "loading": "Loading details...",
+    "error": "Failed to load business details. Please try again."
+  },
+  "map": {
+    "noBusiness": "No businesses to display on map",
+    "loading": "Loading map...",
+    "error": "Failed to load businesses"
+  },
+  "settings": {
+    "title": "Settings",
+    "language": "Language",
+    "selectLanguage": "Select Language",
+    "currentLanguage": "Current Language"
+  },
+  "languages": {
+    "en": "English",
+    "ro": "Romanian",
+    "fr": "French",
+    "de": "German"
+  },
+  "common": {
+    "retry": "Retry",
+    "loading": "Loading...",
+    "error": "An error occurred",
+    "cancel": "Cancel",
+    "confirm": "Confirm"
+  }
+}

@@ -10,6 +10,8 @@ import {
   Image,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { useTranslation } from 'react-i18next';
+import { useLanguage } from '../contexts/LanguageContext';
 import type {
   BusinessListScreenNavigationProp,
   BusinessListScreenRouteProp,
@@ -17,6 +19,7 @@ import type {
 import { fetchBusinessesByCategory } from '../services/api';
 import type { BusinessWithTranslation } from '../types';
 import Theme from '../utils/theme';
+import logger from '../utils/logger';
 
 interface Props {
   navigation: BusinessListScreenNavigationProp;
@@ -24,24 +27,26 @@ interface Props {
 }
 
 const BusinessListScreen: React.FC<Props> = ({ navigation, route }) => {
-  const { categoryId, categoryName } = route.params;
+  const { t } = useTranslation();
+  const { currentLanguage } = useLanguage();
+  const { categoryId } = route.params;
   const [businesses, setBusinesses] = useState<BusinessWithTranslation[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     loadBusinesses();
-  }, [categoryId]);
+  }, [categoryId, currentLanguage]);
 
   const loadBusinesses = async () => {
     try {
       setLoading(true);
       setError(null);
-      const data = await fetchBusinessesByCategory(categoryId, 'en');
+      const data = await fetchBusinessesByCategory(categoryId, currentLanguage);
       setBusinesses(data);
     } catch (err) {
-      console.error('Failed to load businesses:', err);
-      setError('Failed to load businesses. Please try again.');
+      logger.error('Failed to load businesses:', err);
+      setError(t('businessList.error'));
     } finally {
       setLoading(false);
     }
@@ -58,14 +63,10 @@ const BusinessListScreen: React.FC<Props> = ({ navigation, route }) => {
       activeOpacity={0.7}
     >
       {item.images && item.images.length > 0 ? (
-        <Image
-          source={{ uri: item.images[0] }}
-          style={styles.businessImage}
-          resizeMode="cover"
-        />
+        <Image source={{ uri: item.images[0] }} style={styles.businessImage} resizeMode="cover" />
       ) : (
         <View style={styles.placeholderImage}>
-          <Text style={styles.placeholderText}>No Image</Text>
+          <Text style={styles.placeholderText}>{t('businessList.noImage')}</Text>
         </View>
       )}
       <View style={styles.businessInfo}>
@@ -75,9 +76,7 @@ const BusinessListScreen: React.FC<Props> = ({ navigation, route }) => {
         <Text style={styles.businessDescription} numberOfLines={2}>
           {item.description}
         </Text>
-        {item.phone && (
-          <Text style={styles.businessPhone}>📞 {item.phone}</Text>
-        )}
+        {item.phone && <Text style={styles.businessPhone}>📞 {item.phone}</Text>}
         {item.address && (
           <Text style={styles.businessAddress} numberOfLines={1}>
             📍 {item.address}
@@ -100,7 +99,7 @@ const BusinessListScreen: React.FC<Props> = ({ navigation, route }) => {
       <SafeAreaView style={styles.container}>
         <Text style={styles.errorText}>{error}</Text>
         <TouchableOpacity style={styles.retryButton} onPress={loadBusinesses}>
-          <Text style={styles.retryButtonText}>Retry</Text>
+          <Text style={styles.retryButtonText}>{t('common.retry')}</Text>
         </TouchableOpacity>
       </SafeAreaView>
     );
@@ -109,9 +108,7 @@ const BusinessListScreen: React.FC<Props> = ({ navigation, route }) => {
   if (businesses.length === 0) {
     return (
       <SafeAreaView style={styles.container}>
-        <Text style={styles.emptyText}>
-          No businesses found in this category yet.
-        </Text>
+        <Text style={styles.emptyText}>{t('businessList.noBusiness')}</Text>
       </SafeAreaView>
     );
   }

@@ -1,28 +1,20 @@
 // API functions for fetching data from Supabase
 import { supabase } from './supabase';
-import type {
-  Category,
-  CategoryTranslation,
-  Business,
-  BusinessTranslation,
-  BusinessWithTranslation,
-  Language,
-} from '../types';
+import type { Category, CategoryTranslation, BusinessWithTranslation, Language } from '../types';
+import { sanitizeSearchQuery, isValidUUID } from '../utils/validation';
+import { logApiError } from '../utils/logger';
 
 /**
  * Fetch all categories
  */
 export const fetchCategories = async (): Promise<Category[]> => {
   try {
-    const { data, error } = await supabase
-      .from('categories')
-      .select('*')
-      .order('created_at');
+    const { data, error } = await supabase.from('categories').select('*').order('created_at');
 
     if (error) throw error;
     return data || [];
   } catch (error) {
-    console.error('Error fetching categories:', error);
+    logApiError('fetchCategories', error);
     throw error;
   }
 };
@@ -42,7 +34,7 @@ export const fetchCategoryTranslations = async (
     if (error) throw error;
     return data || [];
   } catch (error) {
-    console.error('Error fetching category translations:', error);
+    logApiError('fetchCategoryTranslations', error);
     throw error;
   }
 };
@@ -66,7 +58,7 @@ export const fetchCategoriesWithTranslations = async (
       };
     });
   } catch (error) {
-    console.error('Error fetching categories with translations:', error);
+    logApiError('fetchCategoriesWithTranslations', error);
     throw error;
   }
 };
@@ -79,6 +71,11 @@ export const fetchBusinessesByCategory = async (
   language: Language
 ): Promise<BusinessWithTranslation[]> => {
   try {
+    // Validate categoryId is a valid UUID
+    if (!isValidUUID(categoryId)) {
+      throw new Error('Invalid category ID format');
+    }
+
     // Fetch businesses
     const { data: businesses, error: businessError } = await supabase
       .from('businesses')
@@ -114,7 +111,7 @@ export const fetchBusinessesByCategory = async (
       };
     });
   } catch (error) {
-    console.error('Error fetching businesses by category:', error);
+    logApiError('fetchBusinessesByCategory', error);
     throw error;
   }
 };
@@ -127,6 +124,11 @@ export const fetchBusinessById = async (
   language: Language
 ): Promise<BusinessWithTranslation | null> => {
   try {
+    // Validate businessId is a valid UUID
+    if (!isValidUUID(businessId)) {
+      throw new Error('Invalid business ID format');
+    }
+
     // Fetch business
     const { data: business, error: businessError } = await supabase
       .from('businesses')
@@ -158,7 +160,7 @@ export const fetchBusinessById = async (
       address: translation?.address || '',
     };
   } catch (error) {
-    console.error('Error fetching business by ID:', error);
+    logApiError('fetchBusinessById', error);
     throw error;
   }
 };
@@ -204,7 +206,7 @@ export const fetchAllBusinesses = async (
       };
     });
   } catch (error) {
-    console.error('Error fetching all businesses:', error);
+    logApiError('fetchAllBusinesses', error);
     throw error;
   }
 };
@@ -217,12 +219,22 @@ export const searchBusinesses = async (
   language: Language
 ): Promise<BusinessWithTranslation[]> => {
   try {
+    // Validate and sanitize search query
+    if (!query || typeof query !== 'string') {
+      return [];
+    }
+
+    const sanitizedQuery = sanitizeSearchQuery(query);
+    if (sanitizedQuery.length < 2) {
+      return []; // Require at least 2 characters for search
+    }
+
     // First, search in translations
     const { data: translations, error: translationError } = await supabase
       .from('business_translations')
       .select('business_id')
       .eq('language', language)
-      .ilike('name', `%${query}%`);
+      .ilike('name', `%${sanitizedQuery}%`);
 
     if (translationError) throw translationError;
 
@@ -266,7 +278,7 @@ export const searchBusinesses = async (
       };
     });
   } catch (error) {
-    console.error('Error searching businesses:', error);
+    logApiError('searchBusinesses', error);
     throw error;
   }
 };

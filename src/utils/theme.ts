@@ -3,32 +3,32 @@
 
 export const Colors = {
   // Primary Colors
-  primary: '#1E88E5',        // Main blue
-  primaryDark: '#1565C0',    // Darker blue
-  primaryLight: '#42A5F5',   // Lighter blue
+  primary: '#1E88E5', // Main blue
+  primaryDark: '#1565C0', // Darker blue
+  primaryLight: '#42A5F5', // Lighter blue
 
   // Secondary Colors
-  secondary: '#FFFFFF',      // White
+  secondary: '#FFFFFF', // White
   secondaryLight: '#F5F5F5', // Light gray (near white)
 
   // Accent Colors
-  accent: '#0D47A1',         // Deep blue
-  accentLight: '#64B5F6',    // Sky blue
+  accent: '#0D47A1', // Deep blue
+  accentLight: '#64B5F6', // Sky blue
 
   // Background Colors
   background: '#FFFFFF',
-  backgroundAlt: '#E3F2FD',  // Very light blue
+  backgroundAlt: '#E3F2FD', // Very light blue
 
   // Text Colors
-  textPrimary: '#212121',    // Dark gray (almost black)
-  textSecondary: '#757575',  // Medium gray
-  textOnPrimary: '#FFFFFF',  // White text on blue
+  textPrimary: '#212121', // Dark gray (almost black)
+  textSecondary: '#757575', // Medium gray
+  textOnPrimary: '#FFFFFF', // White text on blue
 
   // Category Colors (for visual distinction)
-  travelAgency: '#2196F3',   // Blue
-  accommodation: '#1976D2',  // Dark blue
-  restaurant: '#0288D1',     // Cyan blue
-  bankATM: '#0277BD',        // Deep cyan
+  travelAgency: '#2196F3', // Blue
+  accommodation: '#1976D2', // Dark blue
+  restaurant: '#0288D1', // Cyan blue
+  bankATM: '#0277BD', // Deep cyan
 
   // Status Colors
   success: '#4CAF50',

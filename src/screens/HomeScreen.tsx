@@ -9,34 +9,38 @@ import {
   ActivityIndicator,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { useTranslation } from 'react-i18next';
+import { useLanguage } from '../contexts/LanguageContext';
 import type { HomeScreenNavigationProp } from '../navigation/types';
 import { fetchCategoriesWithTranslations } from '../services/api';
 import type { Category } from '../types';
 import Theme from '../utils/theme';
-import { CATEGORY_ICONS } from '../utils/constants';
+import logger from '../utils/logger';
 
 interface Props {
   navigation: HomeScreenNavigationProp;
 }
 
 const HomeScreen: React.FC<Props> = ({ navigation }) => {
+  const { t } = useTranslation();
+  const { currentLanguage } = useLanguage();
   const [categories, setCategories] = useState<(Category & { name: string })[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     loadCategories();
-  }, []);
+  }, [currentLanguage]);
 
   const loadCategories = async () => {
     try {
       setLoading(true);
       setError(null);
-      const data = await fetchCategoriesWithTranslations('en');
+      const data = await fetchCategoriesWithTranslations(currentLanguage);
       setCategories(data);
     } catch (err) {
-      console.error('Failed to load categories:', err);
-      setError('Failed to load categories. Please try again.');
+      logger.error('Failed to load categories:', err);
+      setError(t('home.error'));
     } finally {
       setLoading(false);
     }
@@ -51,6 +55,10 @@ const HomeScreen: React.FC<Props> = ({ navigation }) => {
 
   const handleMapPress = () => {
     navigation.navigate('Map', {});
+  };
+
+  const handleSettingsPress = () => {
+    navigation.navigate('Settings');
   };
 
   const getCategoryIcon = (nameKey: string): string => {
@@ -81,7 +89,7 @@ const HomeScreen: React.FC<Props> = ({ navigation }) => {
       <SafeAreaView style={styles.container}>
         <Text style={styles.errorText}>{error}</Text>
         <TouchableOpacity style={styles.retryButton} onPress={loadCategories}>
-          <Text style={styles.retryButtonText}>Retry</Text>
+          <Text style={styles.retryButtonText}>{t('common.retry')}</Text>
         </TouchableOpacity>
       </SafeAreaView>
     );
@@ -91,12 +99,12 @@ const HomeScreen: React.FC<Props> = ({ navigation }) => {
     <SafeAreaView style={styles.container}>
       <ScrollView contentContainerStyle={styles.scrollContent}>
         <View style={styles.header}>
-          <Text style={styles.title}>Welcome to Tulcea</Text>
-          <Text style={styles.subtitle}>Discover the Danube Delta</Text>
+          <Text style={styles.title}>{t('home.welcome')}</Text>
+          <Text style={styles.subtitle}>{t('home.subtitle')}</Text>
         </View>
 
         <View style={styles.categoriesContainer}>
-          <Text style={styles.sectionTitle}>Explore Categories</Text>
+          <Text style={styles.sectionTitle}>{t('home.exploreCategories')}</Text>
           <View style={styles.categoryGrid}>
             {categories.map((category) => (
               <TouchableOpacity
@@ -105,24 +113,35 @@ const HomeScreen: React.FC<Props> = ({ navigation }) => {
                 onPress={() => handleCategoryPress(category)}
                 activeOpacity={0.7}
               >
-                <Text style={styles.categoryIcon}>
-                  {getCategoryIcon(category.name_key)}
-                </Text>
+                <Text style={styles.categoryIcon}>{getCategoryIcon(category.name_key)}</Text>
                 <Text style={styles.categoryName}>{category.name}</Text>
               </TouchableOpacity>
             ))}
           </View>
         </View>
 
-        <TouchableOpacity
-          style={styles.mapButton}
-          onPress={handleMapPress}
-          activeOpacity={0.7}
-        >
+        <TouchableOpacity style={styles.mapButton} onPress={handleMapPress} activeOpacity={0.7}>
           <Text style={styles.mapButtonIcon}>🗺️</Text>
-          <Text style={styles.mapButtonText}>View All on Map</Text>
+          <Text style={styles.mapButtonText}>{t('home.viewAllOnMap')}</Text>
         </TouchableOpacity>
       </ScrollView>
+
+      {/* Bottom Navigation */}
+      <View style={styles.bottomNav}>
+        <TouchableOpacity style={styles.navButton} onPress={() => {}} activeOpacity={0.7}>
+          <Text style={[styles.navIcon, styles.navIconActive]}>🏠</Text>
+          <Text style={[styles.navLabel, styles.navLabelActive]}>{t('navigation.home')}</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity
+          style={styles.navButton}
+          onPress={handleSettingsPress}
+          activeOpacity={0.7}
+        >
+          <Text style={styles.navIcon}>⚙️</Text>
+          <Text style={styles.navLabel}>{t('navigation.settings')}</Text>
+        </TouchableOpacity>
+      </View>
     </SafeAreaView>
   );
 };
@@ -196,6 +215,36 @@ const styles = StyleSheet.create({
   mapButtonText: {
     ...Theme.typography.button,
     color: Theme.colors.textOnPrimary,
+  },
+  bottomNav: {
+    flexDirection: 'row',
+    backgroundColor: Theme.colors.secondary,
+    borderTopWidth: 1,
+    borderTopColor: Theme.colors.border,
+    paddingVertical: Theme.spacing.sm,
+    paddingHorizontal: Theme.spacing.lg,
+    ...Theme.elevation.medium,
+  },
+  navButton: {
+    flex: 1,
+    alignItems: 'center',
+    paddingVertical: Theme.spacing.sm,
+  },
+  navIcon: {
+    fontSize: 24,
+    marginBottom: 4,
+    color: Theme.colors.textSecondary,
+  },
+  navIconActive: {
+    color: Theme.colors.primary,
+  },
+  navLabel: {
+    ...Theme.typography.caption,
+    color: Theme.colors.textSecondary,
+  },
+  navLabelActive: {
+    color: Theme.colors.primary,
+    fontWeight: '600',
   },
   errorText: {
     ...Theme.typography.body,

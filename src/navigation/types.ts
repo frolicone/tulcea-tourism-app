@@ -19,8 +19,14 @@ export type RootStackParamList = {
 
 // Navigation prop types for each screen
 export type HomeScreenNavigationProp = StackNavigationProp<RootStackParamList, 'Home'>;
-export type BusinessListScreenNavigationProp = StackNavigationProp<RootStackParamList, 'BusinessList'>;
-export type BusinessDetailScreenNavigationProp = StackNavigationProp<RootStackParamList, 'BusinessDetail'>;
+export type BusinessListScreenNavigationProp = StackNavigationProp<
+  RootStackParamList,
+  'BusinessList'
+>;
+export type BusinessDetailScreenNavigationProp = StackNavigationProp<
+  RootStackParamList,
+  'BusinessDetail'
+>;
 export type MapScreenNavigationProp = StackNavigationProp<RootStackParamList, 'Map'>;
 export type SettingsScreenNavigationProp = StackNavigationProp<RootStackParamList, 'Settings'>;
 

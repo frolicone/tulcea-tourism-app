@@ -1,0 +1,59 @@
+{
+  "app": {
+    "name": "Turism Tulcea"
+  },
+  "navigation": {
+    "home": "Acasă",
+    "businessDetails": "Detalii Afacere",
+    "mapView": "Vedere Hartă",
+    "settings": "Setări"
+  },
+  "home": {
+    "welcome": "Bine ați venit în Tulcea",
+    "subtitle": "Descoperă Delta Dunării",
+    "exploreCategories": "Explorează Categoriile",
+    "viewAllOnMap": "Vezi Toate pe Hartă",
+    "error": "Eșec la încărcarea categoriilor. Vă rugăm să încercați din nou."
+  },
+  "businessList": {
+    "noImage": "Fără Imagine",
+    "noBusiness": "Nu au fost găsite afaceri în această categorie.",
+    "loading": "Se încarcă afacerile...",
+    "error": "Eșec la încărcarea afacerilor. Vă rugăm să încercați din nou."
+  },
+  "businessDetail": {
+    "notFound": "Afacerea nu a fost găsită",
+    "noImages": "Imagini Indisponibile",
+    "about": "Despre",
+    "call": "Apelează",
+    "googleMaps": "Google Maps",
+    "waze": "Waze",
+    "gps": "GPS",
+    "loading": "Se încarcă detaliile...",
+    "error": "Eșec la încărcarea detaliilor afacerii. Vă rugăm să încercați din nou."
+  },
+  "map": {
+    "noBusiness": "Nicio afacere de afișat pe hartă",
+    "loading": "Se încarcă harta...",
+    "error": "Eșec la încărcarea afacerilor"
+  },
+  "settings": {
+    "title": "Setări",
+    "language": "Limbă",
+    "selectLanguage": "Selectați Limba",
+    "currentLanguage": "Limba Curentă"
+  },
+  "languages": {
+    "en": "Engleză",
+    "ro": "Română",
+    "fr": "Franceză",
+    "de": "Germană"
+  },
+  "common": {
+    "retry": "Reîncearcă",
+    "loading": "Se încarcă...",
+    "error": "A apărut o eroare",
+    "cancel": "Anulează",
+    "confirm": "Confirmă"
+  }
+}

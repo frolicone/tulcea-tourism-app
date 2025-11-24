@@ -28,8 +28,8 @@ BEGIN
   VALUES (
     category_id,
     '+40 752 123 456', -- Contact via website (placeholder phone)
-    45.1785, -- Port Aval, Tulcea
-    28.8039,
+    45.188327, -- Correct GPS coordinates
+    28.811886,
     true
   )
   RETURNING id INTO business_id;

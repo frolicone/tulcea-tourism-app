@@ -1,0 +1,59 @@
+{
+  "app": {
+    "name": "Tulcea Tourismus"
+  },
+  "navigation": {
+    "home": "Startseite",
+    "businessDetails": "Unternehmensdetails",
+    "mapView": "Kartenansicht",
+    "settings": "Einstellungen"
+  },
+  "home": {
+    "welcome": "Willkommen in Tulcea",
+    "subtitle": "Entdecken Sie das Donaudelta",
+    "exploreCategories": "Kategorien Erkunden",
+    "viewAllOnMap": "Alle auf der Karte Anzeigen",
+    "error": "Fehler beim Laden der Kategorien. Bitte versuchen Sie es erneut."
+  },
+  "businessList": {
+    "noImage": "Kein Bild",
+    "noBusiness": "In dieser Kategorie wurden keine Unternehmen gefunden.",
+    "loading": "Unternehmen werden geladen...",
+    "error": "Fehler beim Laden der Unternehmen. Bitte versuchen Sie es erneut."
+  },
+  "businessDetail": {
+    "notFound": "Unternehmen nicht gefunden",
+    "noImages": "Keine Bilder Verfügbar",
+    "about": "Über",
+    "call": "Anrufen",
+    "googleMaps": "Google Maps",
+    "waze": "Waze",
+    "gps": "GPS",
+    "loading": "Details werden geladen...",
+    "error": "Fehler beim Laden der Unternehmensdetails. Bitte versuchen Sie es erneut."
+  },
+  "map": {
+    "noBusiness": "Keine Unternehmen auf der Karte anzuzeigen",
+    "loading": "Karte wird geladen...",
+    "error": "Fehler beim Laden der Unternehmen"
+  },
+  "settings": {
+    "title": "Einstellungen",
+    "language": "Sprache",
+    "selectLanguage": "Sprache Auswählen",
+    "currentLanguage": "Aktuelle Sprache"
+  },
+  "languages": {
+    "en": "Englisch",
+    "ro": "Rumänisch",
+    "fr": "Französisch",
+    "de": "Deutsch"
+  },
+  "common": {
+    "retry": "Erneut Versuchen",
+    "loading": "Laden...",
+    "error": "Ein Fehler ist aufgetreten",
+    "cancel": "Abbrechen",
+    "confirm": "Bestätigen"
+  }
+}

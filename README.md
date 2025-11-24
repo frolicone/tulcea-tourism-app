@@ -101,6 +101,7 @@ See [PROJECT_PLAN.md](../PROJECT_PLAN.md) for detailed development roadmap and c
 ## Support
 
 For issues or questions, refer to:
+
 - [Expo Documentation](https://docs.expo.dev/)
 - [React Native Documentation](https://reactnative.dev/)
 - [Supabase Documentation](https://supabase.com/docs)

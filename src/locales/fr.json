@@ -1,0 +1,59 @@
+{
+  "app": {
+    "name": "Tourisme Tulcea"
+  },
+  "navigation": {
+    "home": "Accueil",
+    "businessDetails": "Détails de l'Entreprise",
+    "mapView": "Vue Carte",
+    "settings": "Paramètres"
+  },
+  "home": {
+    "welcome": "Bienvenue à Tulcea",
+    "subtitle": "Découvrez le Delta du Danube",
+    "exploreCategories": "Explorer les Catégories",
+    "viewAllOnMap": "Voir Tout sur la Carte",
+    "error": "Échec du chargement des catégories. Veuillez réessayer."
+  },
+  "businessList": {
+    "noImage": "Pas d'Image",
+    "noBusiness": "Aucune entreprise trouvée dans cette catégorie.",
+    "loading": "Chargement des entreprises...",
+    "error": "Échec du chargement des entreprises. Veuillez réessayer."
+  },
+  "businessDetail": {
+    "notFound": "Entreprise non trouvée",
+    "noImages": "Aucune Image Disponible",
+    "about": "À propos",
+    "call": "Appeler",
+    "googleMaps": "Google Maps",
+    "waze": "Waze",
+    "gps": "GPS",
+    "loading": "Chargement des détails...",
+    "error": "Échec du chargement des détails de l'entreprise. Veuillez réessayer."
+  },
+  "map": {
+    "noBusiness": "Aucune entreprise à afficher sur la carte",
+    "loading": "Chargement de la carte...",
+    "error": "Échec du chargement des entreprises"
+  },
+  "settings": {
+    "title": "Paramètres",
+    "language": "Langue",
+    "selectLanguage": "Sélectionner la Langue",
+    "currentLanguage": "Langue Actuelle"
+  },
+  "languages": {
+    "en": "Anglais",
+    "ro": "Roumain",
+    "fr": "Français",
+    "de": "Allemand"
+  },
+  "common": {
+    "retry": "Réessayer",
+    "loading": "Chargement...",
+    "error": "Une erreur s'est produite",
+    "cancel": "Annuler",
+    "confirm": "Confirmer"
+  }
+}

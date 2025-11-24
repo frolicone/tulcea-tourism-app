@@ -1,19 +1,16 @@
 // Map screen showing all businesses
 import React, { useEffect, useState } from 'react';
-import {
-  View,
-  Text,
-  StyleSheet,
-  ActivityIndicator,
-  TouchableOpacity,
-} from 'react-native';
+import { View, Text, StyleSheet, ActivityIndicator, TouchableOpacity } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import MapView, { Marker, PROVIDER_GOOGLE } from 'react-native-maps';
+import { useTranslation } from 'react-i18next';
+import { useLanguage } from '../contexts/LanguageContext';
 import type { MapScreenNavigationProp, MapScreenRouteProp } from '../navigation/types';
 import { fetchAllBusinesses, fetchBusinessesByCategory } from '../services/api';
 import type { BusinessWithTranslation } from '../types';
 import Theme from '../utils/theme';
 import { TULCEA_COORDINATES, MAP_DELTA } from '../utils/constants';
+import logger from '../utils/logger';
 
 interface Props {
   navigation: MapScreenNavigationProp;
@@ -21,6 +18,8 @@ interface Props {
 }
 
 const MapScreen: React.FC<Props> = ({ navigation, route }) => {
+  const { t } = useTranslation();
+  const { currentLanguage } = useLanguage();
   const { categoryId } = route.params || {};
   const [businesses, setBusinesses] = useState<BusinessWithTranslation[]>([]);
   const [loading, setLoading] = useState(true);
@@ -28,30 +27,30 @@ const MapScreen: React.FC<Props> = ({ navigation, route }) => {
 
   useEffect(() => {
     loadBusinesses();
-  }, [categoryId]);
+  }, [categoryId, currentLanguage]);
 
   const loadBusinesses = async () => {
     try {
       setLoading(true);
       setError(null);
       const data = categoryId
-        ? await fetchBusinessesByCategory(categoryId, 'en')
-        : await fetchAllBusinesses('en');
+        ? await fetchBusinessesByCategory(categoryId, currentLanguage)
+        : await fetchAllBusinesses(currentLanguage);
       setBusinesses(data);
     } catch (err) {
-      console.error('Failed to load businesses:', err);
-      setError('Failed to load businesses');
+      logger.error('Failed to load businesses:', err);
+      setError(t('map.error'));
     } finally {
       setLoading(false);
     }
   };
 
-  const handleMarkerPress = (business: BusinessWithTranslation) => {
-    navigation.navigate('BusinessDetail', { businessId: business.id });
+  const handleMarkerPress = (businessId: string) => {
+    navigation.navigate('BusinessDetail', { businessId });
   };
 
-  const getMarkerColor = (business: BusinessWithTranslation): string => {
-    // You can customize marker colors by category
+  const getMarkerColor = (_business: BusinessWithTranslation): string => {
+    // You can customize marker colors by category in the future
     return Theme.colors.primary;
   };
 
@@ -68,7 +67,7 @@ const MapScreen: React.FC<Props> = ({ navigation, route }) => {
       <SafeAreaView style={styles.container}>
         <Text style={styles.errorText}>{error}</Text>
         <TouchableOpacity style={styles.retryButton} onPress={loadBusinesses}>
-          <Text style={styles.retryButtonText}>Retry</Text>
+          <Text style={styles.retryButtonText}>{t('common.retry')}</Text>
         </TouchableOpacity>
       </SafeAreaView>
     );
@@ -97,14 +96,14 @@ const MapScreen: React.FC<Props> = ({ navigation, route }) => {
             title={business.name}
             description={business.address}
             pinColor={getMarkerColor(business)}
-            onPress={() => handleMarkerPress(business)}
+            onPress={() => handleMarkerPress(business.id)}
           />
         ))}
       </MapView>
 
       {businesses.length === 0 && (
         <View style={styles.emptyOverlay}>
-          <Text style={styles.emptyText}>No businesses to display on map</Text>
+          <Text style={styles.emptyText}>{t('map.noBusiness')}</Text>
         </View>
       )}
     </View>
